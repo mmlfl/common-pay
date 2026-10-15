@@ -1,0 +1,3 @@
+com.commonpay.boot.autoconfigure.CommonPayAutoConfiguration
+com.commonpay.boot.autoconfigure.redis.CommonPayRedisAutoConfiguration
+com.commonpay.boot.autoconfigure.web.CommonPayWebAutoConfiguration

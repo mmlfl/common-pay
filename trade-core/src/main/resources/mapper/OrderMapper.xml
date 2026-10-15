@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.commonpay.trade.mapper.OrderMapper">
+
+    <select id="selectForUpdate" resultType="com.commonpay.trade.entity.Order">
+        SELECT * FROM trade_order WHERE order_id = #{orderId} FOR UPDATE
+    </select>
+
+    <update id="updateStatus">
+        UPDATE trade_order
+        SET status = #{toStatus}
+        WHERE order_id = #{orderId}
+          AND status = #{fromStatus}
+    </update>
+
+    <!-- 关单 CAS：与 claimClose / tryCloseIfExpired 统一为 pay_deadline <= now -->
+    <update id="closeIfExpired">
+        UPDATE trade_order
+        SET status = 2
+        WHERE order_id = #{orderId}
+          AND status = 0
+          AND pay_deadline &lt;= #{now}
+    </update>
+
+    <update id="extendPayDeadline">
+        UPDATE trade_order
+        SET pay_deadline = #{deadline}
+        WHERE order_id = #{orderId}
+    </update>
+
+    <select id="listExpiredWaitPay" resultType="com.commonpay.trade.entity.Order">
+        SELECT *
+        FROM trade_order
+        WHERE status = 0
+          AND pay_deadline &lt; #{deadline}
+        ORDER BY pay_deadline ASC
+        LIMIT #{limit}
+    </select>
+
+    <select id="getByRequestId" resultType="com.commonpay.trade.entity.Order">
+        SELECT *
+        FROM trade_order
+        WHERE request_id = #{requestId}
+    </select>
+
+    <!--
+      第一版：pay_deadline &lt; now 一次扫全部过期待支付，历史积压大时排序/过滤成本高。
+      保留仅作兼容；调度已改走时间片 + next_close_at 重试。
+    -->
+    <select id="listCloseableExpiredOrders" resultType="com.commonpay.trade.entity.Order">
+        SELECT o.*
+        FROM trade_order o
+        WHERE o.status = 0
+          AND o.pay_deadline &lt;= #{now}
+          AND (o.next_close_at IS NULL OR o.next_close_at &lt;= #{now})
+        ORDER BY COALESCE(o.next_close_at,o.pay_deadline), o.order_id
+        LIMIT #{limit}
+    </select>
+
+    <!-- 第二版时间片：走 idx_order_close_deadline_slice (status, pay_deadline, order_id) -->
+    <select id="listCloseableInDeadlineSlice" resultType="com.commonpay.trade.entity.Order">
+        SELECT o.*
+        FROM trade_order o
+        WHERE o.status = 0
+          AND o.pay_deadline &gt;= #{from}
+          AND o.pay_deadline &lt; #{to}
+          AND (o.next_close_at IS NULL OR o.next_close_at &lt;= #{now})
+        ORDER BY o.pay_deadline ASC, o.order_id ASC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 失败退避：走 idx_order_close_retry (status, next_close_at, pay_deadline) -->
+    <select id="listCloseableCloseRetries" resultType="com.commonpay.trade.entity.Order">
+        SELECT o.*
+        FROM trade_order o
+        WHERE o.status = 0
+          AND o.next_close_at IS NOT NULL
+          AND o.next_close_at &lt;= #{now}
+          AND o.pay_deadline &lt;= #{now}
+        ORDER BY o.next_close_at ASC, o.order_id ASC
+        LIMIT #{limit}
+    </select>
+</mapper>

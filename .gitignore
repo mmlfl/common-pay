@@ -1,0 +1,104 @@
+# ===== Maven / 构建产物 =====
+target/
+**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ===== 编译产物 =====
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+
+# ===== 日志 =====
+logs/
+**/logs/
+*.log
+*.log.*
+
+# ===== 本地配置与密钥（支付/商户切勿入库） =====
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+*.jks
+**/cert/
+**/certs/
+**/secrets/
+application-local.yml
+application-local.yaml
+application-local.properties
+**/application-local.yml
+**/application-local.yaml
+**/application-local.properties
+
+# ===== IntelliJ IDEA =====
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# ===== Eclipse / STS =====
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+
+# ===== NetBeans =====
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ===== VS Code / Cursor =====
+.vscode/
+.cursor/
+*.code-workspace
+
+# ===== 操作系统 =====
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ===== 测试 / 覆盖率 =====
+.jacoco/
+jacoco.exec
+**/jacoco.exec
+test-output/
+.cache/
+.gradle/
+
+# ===== Kotlin（若后续混用） =====
+.kotlin/
+
+# ===== 临时文件 =====
+*.tmp
+*.temp
+*.swp
+*~
+.history/

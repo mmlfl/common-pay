@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.commonpay.trade.mapper.InventoryMapper">
+
+    <update id="decreaseStock">
+        UPDATE trade_inventory
+        SET cnt = cnt - #{quantity}
+        WHERE product_id = #{productId}
+          AND cnt &gt;= #{quantity}
+    </update>
+
+    <update id="increaseStock">
+        UPDATE trade_inventory
+        SET cnt = cnt + #{quantity}
+        WHERE product_id = #{productId}
+    </update>
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.commonpay</groupId>
+        <artifactId>common-pay</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>common-pay-spring-boot-starter</artifactId>
+    <description>对外唯一入口：聚合内核、支付渠道、自动装配与 Flyway（强制 MySQL + Redis）</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.commonpay</groupId>
+            <artifactId>trade-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.commonpay</groupId>
+            <artifactId>pay-channel-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.commonpay</groupId>
+            <artifactId>pay-channel-wechat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.commonpay</groupId>
+            <artifactId>pay-channel-alipay</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <!-- 编译 ExceptionHandler；运行时由宿主 spring-boot-starter-web 提供 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+        </dependency>
+        <!-- Redis JSON 序列化（LocalDateTime / @class） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+    </dependencies>
+</project>
